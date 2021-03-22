@@ -8,7 +8,7 @@ const Flat = (props) => {
     <div className="flat">
       <img className="flat-picture" src={imageUrl} alt="flat"/>
       <div className="flat-title">
-        {price} - {name}
+        <strong>{price}£</strong> - {name}
       </div>
     </div>
   )
