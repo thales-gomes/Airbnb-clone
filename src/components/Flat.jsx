@@ -2,10 +2,10 @@ import React from 'react';
 import './Flat.scss'
 
 const Flat = (props) => {
-  const { price, name, imageUrl } = props;
-  console.log(imageUrl)
+  const { price, name, imageUrl, onClick } = props;
+  
   return (
-    <div className="flat">
+    <div className="flat" onClick={() => onClick()}>
       <img className="flat-picture" src={imageUrl} alt="flat"/>
       <div className="flat-title">
         <strong>{price}£</strong> - {name}

@@ -6,6 +6,7 @@ import Spinner from "./Spinner";
 class App extends React.Component {
 	state = {
 		flats: [],
+		selected: {}
 	}
 
 	componentDidMount() {
@@ -14,11 +15,16 @@ class App extends React.Component {
 		.then(flats => this.setState({ flats: flats }))	
 	}
 
+	selectFlat = () => {
+		console.log("selectFlat")
+	}
+
 	renderDisplay(flats) {
 		let flatList = flats.map((flat, i) => {
 			const { name, price, id, imageUrl } = flat
 			return(
-			<Flat
+				<Flat
+				onClick={this.selectFlat}
 				key={id}
 				price={price}
 				name={name}
@@ -30,11 +36,12 @@ class App extends React.Component {
 	}
 
 	render() {
-		const { flats } = this.state;
+		const { flats, selected } = this.state;
 
 		return (
 			<div className="app">
 				<div className="main">
+					<p>Selected flat: <code>{ selected.id}</code></p>
 					<input className="search" />
 					<div className="flats">
 						{this.renderDisplay(flats)}
