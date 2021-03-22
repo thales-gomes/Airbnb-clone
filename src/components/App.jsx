@@ -14,11 +14,7 @@ class App extends React.Component {
 		.then(flats => this.setState({ flats: flats }))	
 	}
 
-
-
-	render() {
-		const { flats } = this.state;
-
+	renderDisplay(flats) {
 		let flatList = flats.map((flat, i) => {
 			const { name, price, id, imageUrl } = flat
 			return(
@@ -29,15 +25,19 @@ class App extends React.Component {
 				imageUrl={imageUrl} />
 			)
 		})
-		
-		if (flats.length === 0) { flatList = <Spinner />}
+		if (flats.length === 0) { flatList = <Spinner /> }
+		return flatList
+	}
+
+	render() {
+		const { flats } = this.state;
 
 		return (
 			<div className="app">
 				<div className="main">
 					<input className="search" />
 					<div className="flats">
-						{flatList}
+						{this.renderDisplay(flats)}
 					</div>
 				</div>
 				<div className="map"></div>
