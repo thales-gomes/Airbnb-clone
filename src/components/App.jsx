@@ -14,7 +14,8 @@ class App extends React.Component {
 	state = {
 		flats: [],
 		selected: -1, // no selected flats
-		center: [	2.349014, 48.864716 ]
+		center: [2.349014, 48.864716],
+		filterText: ''
 	}
 
 	componentDidMount() {
@@ -65,17 +66,24 @@ class App extends React.Component {
 		return markers
 	}
 
+	filterFlats = (e) => {
+		const text = e.target.value;
+		this.setState({filterText: text})
+	}
 
 	render() {
-		const { flats, selected, center } = this.state;
+		const { flats, selected, center, filterText } = this.state;
+		const filteredFlats = flats.filter(flat => {
+			return flat.name.match(new RegExp(filterText, 'i'));
+			});
 
 		return (
 			<div className="app">
 				<div className="main">
-					<p>Selected flat: <code>{ selected}</code></p>
-					<input className="search" />
+					<p>Selected flat: <code>{selected}</code></p>
+					<input className="search" onChange={this.filterFlats}/>
 					<div className="flats">
-						{this.flatList(flats, selected)}
+						{this.flatList(filteredFlats, selected)}
 					</div>
 				</div>
 				<div className="map">
@@ -84,7 +92,7 @@ class App extends React.Component {
 					center={center}
 					containerStyle={{ height: "100vh", width: "100%" }}
 					style="mapbox://styles/mapbox/streets-v8">
-						{this.flatMarkers(flats, selected)}
+						{this.flatMarkers(filteredFlats, selected)}
 				</Map>
 				</div>
 			</div>
