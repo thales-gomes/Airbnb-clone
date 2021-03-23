@@ -11,7 +11,8 @@ const Map = ReactMapboxGl({
 class App extends React.Component {
 	state = {
 		flats: [],
-		selected: false // no selected flats
+		selected: -1, // no selected flats
+		center: [	2.349014, 48.864716 ]
 	}
 
 	componentDidMount() {
@@ -23,7 +24,9 @@ class App extends React.Component {
 
 	selectFlat = (id) => {
 		console.log(`selectFlat ${id}`);
-		this.setState({selected: id})
+		const { flats } = this.state;
+		const flat = flats.find(flat => flat.id === id);
+		this.setState({ selected: id, center: [flat.lng, flat.lat] });
 	}
 
 	renderDisplay(flats, selected) {
@@ -45,7 +48,7 @@ class App extends React.Component {
 	}
 
 	render() {
-		const { flats, selected } = this.state;
+		const { flats, selected, center } = this.state;
 
 		return (
 			<div className="app">
@@ -59,7 +62,7 @@ class App extends React.Component {
 				<div className="map">
 				<Map
 					zoom={[14]}
-					center={[-0.2416815, 51.5285582]}
+					center={center}
 					containerStyle={{ height: "100vh", width: "100%" }}
 					style="mapbox://styles/mapbox/streets-v8" />
 				</div>
