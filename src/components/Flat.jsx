@@ -2,10 +2,11 @@ import React from 'react';
 import './Flat.scss'
 
 const Flat = (props) => {
-  const { price, name, imageUrl } = props;
-  console.log(imageUrl)
+  const { price, name, imageUrl, onSelect, id, selected } = props;
+  const className = selected ? 'flat selected' : 'flat';
+
   return (
-    <div className="flat">
+    <div className={className} onClick={() => onSelect(id)}>
       <img className="flat-picture" src={imageUrl} alt="flat"/>
       <div className="flat-title">
         <strong>{price}£</strong> - {name}
