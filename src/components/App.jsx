@@ -1,20 +1,14 @@
 import React from "react";
 import "./App.scss";
-import Flat from "./Flat";
-import Spinner from "./Spinner";
-import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
-import FlatMarker from "./FlatMarker";
-
-
-const Map = ReactMapboxGl({
-	accessToken: process.env.REACT_APP_mapKey
-	});
+import flatList from "./helpers/flatList";
+import MapDisplay from './helpers/MapDisplay'
+import flatMarkers from './helpers/flatMarkers';
 
 class App extends React.Component {
 	state = {
 		flats: [],
 		selected: -1, // no selected flats
-		center: [2.349014, 48.864716],
+		center: [2.349014, 48.864716], // Center of Paris
 		filterText: ''
 	}
 
@@ -33,39 +27,6 @@ class App extends React.Component {
 		this.setState({ selected: id, center: newCenter });
 	}
 
-	flatList(flats, selected) {
-		let flatList = flats.map(flat => {
-			const { name, price, id, imageUrl } = flat
-			return(
-				<Flat
-					onSelect={this.selectFlat}
-					key={id}
-					id={id}
-					price={price}
-					name={name}
-					imageUrl={imageUrl}
-					selected={selected === flat.id}/>
-			)
-		})
-		if (flats.length === 0) { flatList = <Spinner /> }
-		return flatList
-	}
-
-	flatMarkers(flats, selected) {
-		const markers = flats.map(flat => {
-			const { price, id } = flat
-			return (
-				<Marker coordinates={[flat.lng, flat.lat]}>
-					<FlatMarker
-						key={id}
-						price={price}
-						selected={selected === flat.id} />
-				</Marker>
-			)}
-		)
-		return markers
-	}
-
 	filterFlats = (e) => {
 		const text = e.target.value;
 		this.setState({filterText: text})
@@ -80,21 +41,12 @@ class App extends React.Component {
 		return (
 			<div className="app">
 				<div className="main">
-					<p>Selected flat: <code>{selected}</code></p>
-					<input className="search" onChange={this.filterFlats}/>
+					<input className="search" placeholder="Type to find your flat!" onChange={this.filterFlats}/>
 					<div className="flats">
-						{this.flatList(filteredFlats, selected)}
+						{flatList(filteredFlats, this.selectFlat, selected)}
 					</div>
 				</div>
-				<div className="map">
-				<Map
-					zoom={[14]}
-					center={center}
-					containerStyle={{ height: "100vh", width: "100%" }}
-					style="mapbox://styles/mapbox/streets-v8">
-						{this.flatMarkers(filteredFlats, selected)}
-				</Map>
-				</div>
+				{MapDisplay(center, flatMarkers, filteredFlats, selected)}
 			</div>
 		);
 	}
