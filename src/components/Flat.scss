@@ -1,13 +1,29 @@
 .flat {
-  flex-basis: calc(50% - 20px);
+  border: 2px solid white;
+  flex-basis: calc(50% - 24px);
   margin: 10px;
+
   .flat-picture {
-  height: 30vh;
-  width: 100%;
-  background-size: cover;
-  background-position: center;
+    height: 30vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.8;
   }
+
   .flat-title {
-  margin-top: 10px;
+    margin-top: 10px;
   }
+
+  &.selected {
+    border: 2px solid red;
   }
+
+
+}
+
+.flat-picture:hover {
+  border: 2px solid green;
+  cursor: pointer;
+  opacity: 1;
+}

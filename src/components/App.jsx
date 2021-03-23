@@ -2,33 +2,44 @@ import React from "react";
 import "./App.scss";
 import Flat from "./Flat";
 import Spinner from "./Spinner";
+import ReactMapboxGl from 'react-mapbox-gl';
+
+const mapKey = "pk.eyJ1IjoidGhhbGVzLWdvbWVzIiwiYSI6ImNrbDBzN29jOTBvc2YycHBlMG00dnpudzIifQ.L4ARbpTOvTUY8LYUJlpgiA"
+
+const Map = ReactMapboxGl({
+	accessToken: mapKey
+	});
 
 class App extends React.Component {
 	state = {
 		flats: [],
-		selected: {}
+		selected: false // no selected flats
 	}
 
 	componentDidMount() {
-		fetch("https://raw.githubusercontent.com/lewagon/flats-boilerplate/master/flats.json")
+		const FLATS_URL = "https://raw.githubusercontent.com/lewagon/flats-boilerplate/master/flats.json"
+		fetch(FLATS_URL)
 		.then(response => response.json())
-		.then(flats => this.setState({ flats: flats }))	
+		.then(flats => this.setState({ flats: flats }))
 	}
 
-	selectFlat = () => {
-		console.log("selectFlat")
+	selectFlat = (id) => {
+		console.log(`selectFlat ${id}`);
+		this.setState({selected: id})
 	}
 
-	renderDisplay(flats) {
+	renderDisplay(flats, selected) {
 		let flatList = flats.map((flat, i) => {
 			const { name, price, id, imageUrl } = flat
 			return(
 				<Flat
-				onClick={this.selectFlat}
-				key={id}
-				price={price}
-				name={name}
-				imageUrl={imageUrl} />
+					onSelect={this.selectFlat}
+					key={id}
+					id={id}
+					price={price}
+					name={name}
+					imageUrl={imageUrl}
+					selected={selected === flat.id}/>
 			)
 		})
 		if (flats.length === 0) { flatList = <Spinner /> }
@@ -41,13 +52,19 @@ class App extends React.Component {
 		return (
 			<div className="app">
 				<div className="main">
-					<p>Selected flat: <code>{ selected.id}</code></p>
+					<p>Selected flat: <code>{ selected}</code></p>
 					<input className="search" />
 					<div className="flats">
-						{this.renderDisplay(flats)}
+						{this.renderDisplay(flats, selected)}
 					</div>
 				</div>
-				<div className="map"></div>
+				<div className="map">
+				<Map
+					zoom={[14]}
+					center={[-0.2416815, 51.5285582]}
+					containerStyle={{ height: "100vh", width: "100%" }}
+					style="mapbox://styles/mapbox/streets-v8" />
+				</div>
 			</div>
 		);
 	}
