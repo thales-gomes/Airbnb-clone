@@ -1,4 +1,4 @@
 # Airbnb Clone
-- Project built using SASS, Javascript/ES6 and React
+- Project built using React, Javascript/ES6 and SASS
 
 
