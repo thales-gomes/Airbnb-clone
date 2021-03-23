@@ -4,10 +4,8 @@ import Flat from "./Flat";
 import Spinner from "./Spinner";
 import ReactMapboxGl from 'react-mapbox-gl';
 
-const mapKey = "pk.eyJ1IjoidGhhbGVzLWdvbWVzIiwiYSI6ImNrbDBzN29jOTBvc2YycHBlMG00dnpudzIifQ.L4ARbpTOvTUY8LYUJlpgiA"
-
 const Map = ReactMapboxGl({
-	accessToken: mapKey
+	accessToken: process.env.REACT_APP_mapKey
 	});
 
 class App extends React.Component {
