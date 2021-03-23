@@ -2,7 +2,9 @@ import React from "react";
 import "./App.scss";
 import Flat from "./Flat";
 import Spinner from "./Spinner";
-import ReactMapboxGl from 'react-mapbox-gl';
+import ReactMapboxGl, { Marker } from 'react-mapbox-gl';
+import FlatMarker from "./FlatMarker";
+
 
 const Map = ReactMapboxGl({
 	accessToken: process.env.REACT_APP_mapKey
@@ -23,14 +25,15 @@ class App extends React.Component {
 	}
 
 	selectFlat = (id) => {
-		console.log(`selectFlat ${id}`);
 		const { flats } = this.state;
 		const flat = flats.find(flat => flat.id === id);
-		this.setState({ selected: id, center: [flat.lng, flat.lat] });
+		const newCenter = [flat.lng, flat.lat]
+
+		this.setState({ selected: id, center: newCenter });
 	}
 
-	renderDisplay(flats, selected) {
-		let flatList = flats.map((flat, i) => {
+	flatList(flats, selected) {
+		let flatList = flats.map(flat => {
 			const { name, price, id, imageUrl } = flat
 			return(
 				<Flat
@@ -47,6 +50,22 @@ class App extends React.Component {
 		return flatList
 	}
 
+	flatMarkers(flats, selected) {
+		const markers = flats.map(flat => {
+			const { price, id } = flat
+			return (
+				<Marker coordinates={[flat.lng, flat.lat]}>
+					<FlatMarker
+						key={id}
+						price={price}
+						selected={selected === flat.id} />
+				</Marker>
+			)}
+		)
+		return markers
+	}
+
+
 	render() {
 		const { flats, selected, center } = this.state;
 
@@ -56,7 +75,7 @@ class App extends React.Component {
 					<p>Selected flat: <code>{ selected}</code></p>
 					<input className="search" />
 					<div className="flats">
-						{this.renderDisplay(flats, selected)}
+						{this.flatList(flats, selected)}
 					</div>
 				</div>
 				<div className="map">
@@ -64,7 +83,9 @@ class App extends React.Component {
 					zoom={[14]}
 					center={center}
 					containerStyle={{ height: "100vh", width: "100%" }}
-					style="mapbox://styles/mapbox/streets-v8" />
+					style="mapbox://styles/mapbox/streets-v8">
+						{this.flatMarkers(flats, selected)}
+				</Map>
 				</div>
 			</div>
 		);
