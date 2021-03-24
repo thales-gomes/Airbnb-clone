@@ -3,8 +3,7 @@ import Flat from "../Flat";
 import Spinner from "../Spinner";
 
 const	flatList = (flats, selectFlat, selected) => {
-		let flatList = flats.map(flat => {
-			const { name, price, id, imageUrl } = flat
+		let flatList = flats.map(({ name, price, id, image_url }) => {
 			return(
 				<Flat
 					onSelect={selectFlat}
@@ -12,8 +11,8 @@ const	flatList = (flats, selectFlat, selected) => {
 					id={id}
 					price={price}
 					name={name}
-					imageUrl={imageUrl}
-					selected={selected === flat.id}/>
+					imageUrl={image_url}
+					selected={selected === id}/>
 			)
 		})
 		if (flats.length === 0) { flatList = <Spinner /> }
