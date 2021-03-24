@@ -3,14 +3,13 @@ import { Marker } from 'react-mapbox-gl';
 import FlatMarker from "../FlatMarker";
 
 const flatMarkers = (flats, selected) => {
-  const markers = flats.map(flat => {
-    const { price, id } = flat
+  const markers = flats.map(({ price, id, lng, lat }) => {
     return (
-      <Marker coordinates={[flat.lng, flat.lat]}>
+      <Marker coordinates={[lng, lat]}>
         <FlatMarker
           key={id}
           price={price}
-          selected={selected === flat.id} />
+          selected={selected === id} />
       </Marker>
     )}
   )

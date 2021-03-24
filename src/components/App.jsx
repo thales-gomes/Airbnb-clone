@@ -13,7 +13,7 @@ class App extends React.Component {
 	}
 
 	componentDidMount() {
-		const FLATS_URL = "https://raw.githubusercontent.com/lewagon/flats-boilerplate/master/flats.json"
+		const FLATS_URL = "http://localhost:3000/flats.json"
 		fetch(FLATS_URL)
 		.then(response => response.json())
 		.then(flats => this.setState({ flats: flats }))
@@ -22,31 +22,31 @@ class App extends React.Component {
 	selectFlat = (id) => {
 		const { flats } = this.state;
 		const flat = flats.find(flat => flat.id === id);
-		const newCenter = [flat.lng, flat.lat]
+		const newCenter = [flat.lng, flat.lat];
 
 		this.setState({ selected: id, center: newCenter });
 	}
 
 	filterFlats = (e) => {
 		const text = e.target.value;
-		this.setState({filterText: text})
+		this.setState({ filterText: text });
 	}
 
 	render() {
 		const { flats, selected, center, filterText } = this.state;
-		const filteredFlats = flats.filter(flat => {
-			return flat.name.match(new RegExp(filterText, 'i'));
-			});
+		const filteredFlats = flats.filter(({name}) => {
+			return name.match(new RegExp(filterText, 'i'));
+		});
 
 		return (
 			<div className="app">
-				<div className="main">
+				<div className="main"> 
 					<input className="search" placeholder="Type to find your flat!" onChange={this.filterFlats}/>
 					<div className="flats">
-						{flatList(filteredFlats, this.selectFlat, selected)}
+						{flatList(filteredFlats, this.selectFlat, selected)} {/* Helper */}
 					</div>
 				</div>
-				{MapDisplay(center, flatMarkers, filteredFlats, selected)}
+				{MapDisplay(center, flatMarkers, filteredFlats, selected)} {/* Helper */}
 			</div>
 		);
 	}
